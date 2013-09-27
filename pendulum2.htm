@@ -1,0 +1,147 @@
+<html>
+  <head>
+    <title>double pendulum</title>
+    <script src="jquery.min.js" charset="utf-8"></script>
+    <script src="d3.v3.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <h1>YOU ARE GETTING...</h1>
+    <svg height='600px'>
+    </svg>
+    <h1>MORE AWAKE!</h1>
+    Need something calmer? <a href="pendulum.htm">Try this.</a>
+    <div id='theta'></div>
+  </body>
+  <script type="text/javascript">
+    var svg;
+    var rod;
+    var bob;
+    
+    var data_freq = 4; // Datapoints per second
+    var phase_data = []; // elements are {theta, thetadot}
+    
+    var t0 = Date.now();
+    var t = Date.now();
+    var gravity = 500;
+    
+    var lineFunction = d3.svg.line()
+      .x(function(item) { return item.x != undefined? item.x : item.getX(); })
+      .y(function(item) { return item.y != undefined? item.y : item.getY(); })
+      .interpolate('linear');
+    
+    var pendulum = {};
+    pendulum.pivot = {x: 320, y: 200};
+    
+    pendulum.m1 = 2;
+    pendulum.m2 = 1;
+    
+    pendulum.l1 = 150;
+    pendulum.l2 = 150;
+    
+    pendulum.r1 = 20;
+    pendulum.r2 = 20;
+    
+    pendulum.th1 = 1.5;
+    pendulum.th2 = 1.5;
+    
+    pendulum.th1dot = 0;
+    pendulum.th2dot = 0;
+    
+    pendulum.getX1 = function() { return this.pivot.x + this.l1 * Math.sin(this.th1); }
+    pendulum.getY1 = function() { return this.pivot.y + this.l1 * Math.cos(this.th1); }
+    
+    pendulum.getX2 = function() { return this.getX1() + this.l2 * Math.sin(this.th2); }
+    pendulum.getY2 = function() { return this.getY1() + this.l2 * Math.cos(this.th2); }
+    
+    pendulum.update = function(dt) {
+      // Shorthand vars, because the equations of motion are long
+      var g = gravity
+      var m1 = this.m1;
+      var m2 = this.m2;
+      var l1 = this.l1;
+      var l2 = this.l2;
+      var th1 = this.th1;
+      var th2 = this.th2;
+      var thd1 = this.th1dot;
+      var thd2 = this.th2dot;
+      var sin = Math.sin;
+      var cos = Math.cos;
+      
+      // Get accelerations
+      var denominator = (l1*(2*m1 + m2 - m2*cos(2*(th1 - th2))));
+      var th1ddot = (-g*(2*m1 + m2)*sin(th1) - m2*g*sin(th1 - 2*th2) - 2*sin(th1 - th2)*m2*(thd2*thd2*l2 - thd1*thd1*l1*cos(th1 - th2))) / denominator;
+      var th2ddot = (2*sin(th1 - th2)*(thd1*thd1*l1*(m1 + m2) + g*(m1 + m2)*cos(th1) + thd2*thd2*l2*m2*cos(th1 - th2))) / denominator;
+      
+      // Update velocity
+      this.th1dot += th1ddot * dt;
+      this.th2dot += th2ddot * dt;
+      
+      //Update position
+      this.th1 += this.th1dot * dt;
+      this.th2 += this.th2dot * dt;
+    }
+    pendulum.draw = function(firstDraw) {
+      if (firstDraw) {
+        // First bob
+        this.rod1 = svg.append('path')
+          .attr('stroke', 'black')
+          .attr('stroke-width', 2);
+        this.bob1 = svg.append('circle').data([this])
+          .attr('r', function(pendulum) { return pendulum.r1; })
+          .attr('opacity', 0.5)
+          .attr('fill', 'green');
+        
+        // Second bob
+        this.rod2 = svg.append('path')
+          .attr('stroke', 'black')
+          .attr('stroke-width', 2);
+        this.bob2 = svg.append('circle').data([this])
+          .attr('r', function(pendulum) { return pendulum.r2; })
+          .attr('opacity', 0.5)
+          .attr('fill', 'orange');
+      }
+      
+      var bob1pos = {x:this.getX1(), y:this.getY1()};
+      var bob2pos = {x:this.getX2(), y:this.getY2()};
+      this.rod1
+        .attr('d', lineFunction([this.pivot, bob1pos]));
+      this.bob1
+        .attr('cx', function(pendulum) { return pendulum.getX1(); })
+        .attr('cy', function(pendulum) { return pendulum.getY1(); })
+      
+      this.rod2
+        .attr('d', lineFunction([bob1pos, bob2pos]));
+      this.bob2
+        .attr('cx', function(pendulum) { return pendulum.getX2(); })
+        .attr('cy', function(pendulum) { return pendulum.getY2(); })
+        
+      d3.selectAll('div').data([this.th1, this.th2])
+        .text(function(d) { return Math.round((d*180/Math.PI)*10)/10 + " deg"; });
+    }
+    
+    
+    $(document).ready(function() {
+      svg = d3.select('svg');
+      
+      
+      pendulum.draw(true);
+      
+      // Update and display the pendulum
+      d3.timer(function() {
+        dt = Date.now() - t;
+        t += dt;
+        
+        pendulum.update(dt/1000);
+        pendulum.draw();
+      });
+      
+      // Take data and display it
+      setTimeout(function() {
+        
+      }, 1000/data_freq);
+    });
+    
+    $("body").click(function(evt) {
+    })
+  </script>
+</html>

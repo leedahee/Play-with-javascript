@@ -1,0 +1,90 @@
+<html>
+  <head>
+    <title>single pendulum</title>
+    <script src="jquery.min.js" charset="utf-8"></script>
+    <script src="d3.v3.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <h1>YOU ARE GETTING SLEEPY...</h1>
+    <svg height='300px'>
+    </svg>
+    Too bored? <a href="pendulum2.htm">There is a remedy for that.</a>
+  </body>
+  <script type="text/javascript">
+    var svg;
+    var rod;
+    var bob;
+    
+    var data_freq = 4; // Datapoints per second
+    var phase_data = []; // elements are {theta, thetadot}
+    
+    var t0 = Date.now();
+    var t = Date.now();
+    var gravity = 300;
+    
+    var lineFunction = d3.svg.line()
+      .x(function(item) { return item.x != undefined? item.x : item.getX(); })
+      .y(function(item) { return item.y != undefined? item.y : item.getY(); })
+      .interpolate('linear');
+    
+    var pendulum = {};
+    pendulum.pivot = {x: 250, y: 20};
+    pendulum.m = 1; // mass of pendulum bob
+    pendulum.l = 200; // Length of pendulum, from pivot to center of bob
+    pendulum.r = 20; // Radius of bob
+    pendulum.th = 1; // Angle of pendulum, measured CW from the vertical downwards position
+    pendulum.thdot = 0; // Angular velocity of the pendulum
+    pendulum.getX = function() { return this.pivot.x + this.l * Math.sin(this.th); }
+    pendulum.getY = function() { return this.pivot.y + this.l * Math.cos(this.th); }
+    pendulum.update = function(dt) {
+      // Get acceleration
+      var thddot = - gravity * Math.sin(this.th) / this.l;
+      // Update velocity
+      this.thdot += thddot * dt;
+      //Update position
+      this.th += this.thdot * dt;
+    }
+    pendulum.draw = function(firstDraw) {
+      if (firstDraw) {
+        this.rod = svg.append('path')
+          .attr('stroke', 'black')
+          .attr('stroke-width', 2);
+        this.bob = svg.append('circle').data([pendulum])
+          .attr('r', function(pendulum) { return pendulum.r; })
+          .attr('opacity', 0.5)
+          .attr('fill', 'green');
+          
+      }
+      this.rod
+        .attr('d', lineFunction([this.pivot, this]));
+      this.bob
+        .attr('cx', function(pendulum) { return pendulum.getX(); })
+        .attr('cy', function(pendulum) { return pendulum.getY(); })
+      d3.selectAll('div').data([this.th])
+        .text(function(d) { return "Theta: " + Math.round((d*180/Math.PI)*10)/10 + " deg"; });
+    }
+    
+    $(document).ready(function() {
+      svg = d3.select('svg');
+      
+      
+      pendulum.draw(true);
+      
+      // Update and display the pendulum
+      d3.timer(function() {
+        dt = Date.now() - t;
+        t += dt;
+        pendulum.update(dt/1000);
+        pendulum.draw();
+      });
+      
+      // Take data and display it
+      setTimeout(function() {
+        
+      }, 1000/data_freq);
+    });
+    
+    $("body").click(function(evt) {
+    })
+  </script>
+</html>
