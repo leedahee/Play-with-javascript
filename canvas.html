@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset = "utf-8">
+<!-- processbar -->
+     <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+         rel = "stylesheet">
+      <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+      <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<!-- java -->
+     <script src='canvas.js'></script>
+     <script src='name_desg.js'></script>
+
+ <!-- css  -->
+    <link rel="stylesheet" href="canvas.css">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Amatica+SC:700|Open+Sans|Sansita" rel="stylesheet">
+</head>
+<body>
+<div class='container'>
+<!-- title, input/add box -->
+  <p class='header'>My To Do List</p>
+
+  <div id="myDIV" class="header">
+    <input type="text" id="myInput" placeholder="What????">
+    <span onclick="newElement()" class="addBtn">Add</span>
+  </div>
+  <!-- progress bar -->
+<div class='ct'>
+  <div id = "progressbar-1"></div>
+</div>
+<!-- badge -->
+<p id='d'></p>
+
+<!-- list -->
+<ul id="myUL" style="list-style:none;">
+  <li>Grocery shopping</li>
+  <li class="checked">Morning Meeting</li>
+  <li>Midtem Exam</li>
+  <li>Hangout with Jhon</li>
+  <li class="checked">Laundry</li>
+</ul>
+
+
+  </div>
+</div>
+
+</body>
+</html>

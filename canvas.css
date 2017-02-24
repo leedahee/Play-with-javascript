@@ -1,0 +1,136 @@
+/* Include the padding and border in an element's total width and height */
+* {
+    box-sizing: border-box;
+}
+.container  {
+    margin: 1px 2px;
+    position: relative;
+    width: 100%;
+}
+/* Style the header */
+.header {
+    font-family: 'Amatic SC', cursive;
+    font-weight: 900;
+    font-size: 50px;
+    /*background-color: #900C3F;*/
+    padding: 10px 10px;
+    color: Black;
+    text-align: center;
+}
+
+/* Clear floats after the header */
+.header:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.ct{
+  position: center;
+  margin: 10px;
+  width: 95%;
+}
+/* Style the input */
+input {
+    box-sizing: border-box;
+    border: 2px solid #d9d9d9;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    width: 75%;
+    padding: 5px;
+    float: left;
+    font-size: 26px;
+}
+input[type='text']{
+  font-family: 'Amatic SC', cursive;
+}
+
+/* Style the "Add" button */
+.addBtn {
+    padding: 6px;
+    width: 25%;
+    background: #d9d9d9;
+    color: #FF0B7A ;
+    float: left;
+    text-align: center;
+    font-size: 27px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.addBtn:hover {
+    background-color: #bbb;
+}
+
+/*progress bar*/
+.ui-widget-header {
+           background: #FF0B7A;
+           border: 2px solid #DDD;
+           color: #EAF7B0;
+           font-weight: bold;
+}
+/* Remove margins and padding from the list */
+ul {
+   font-family: 'Amatic SC', cursive;
+    /*margin: 0;
+    padding: 0;*/
+}
+
+/* Style the list items */
+ul li {
+    cursor: pointer;
+    position: relative;
+    padding: 12px 5px 10px 2px;
+    color: black;
+    /*background: #eee;*/
+    font-size: 20px;
+    transition: 0.2s;
+    width : 97.5%;
+
+    /* make the list items unselectable */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Darker background-color on hover */
+ul li:hover {
+    background: #ddd;
+}
+
+/* When clicked on, add a background color and strike out text */
+ul li.checked {
+    color: black;
+    text-decoration: line-through;
+}
+
+/* Add a "checked" mark when clicked on */
+ul li.checked::before {
+    content: '';
+    position: absolute;
+    border-color: #FF0B7A;
+    border-style: solid;
+    border-width: 0 2px 2px 0;
+    top: 10px;
+    left: -25px;
+    transform: rotate(45deg);
+    height: 15px;
+    width: 7px;
+}
+
+
+/* Style the close button */
+.close {
+    padding-left: 10px;
+    color: black;
+    font-weight: bold;
+    float: right;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #FF0B7A;
+    font-size: 50px;
+
+}
