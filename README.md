@@ -5,6 +5,7 @@
 
 Here is the prototype
 
-[Sites Using React](file:///Users/daheelee/Documents/java/Play-with-javascript/prototype/index.html#/screens)
+[Here is the prototype](file:///Users/daheelee/Documents/java/Play-with-javascript/prototype/index.html#/screens)
+<a href="file:///Users/daheelee/Documents/java/Play-with-javascript/prototype/index.html#/screens">Here is the prototype</a>
 
 
