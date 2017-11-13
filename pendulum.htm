@@ -27,96 +27,71 @@
     </p>
     <svg width="960" height="500"></svg>
 
-  <script type="text/javascript">
-    var svg;
-    var rod;
-    var bob;
+    <script type="text/javascript">
+      var svg;
+      var rod;
+      var bob;
 
-    var svgWidth = 1200
-    var svgHeight = 600
-    var padding = 20
+      var svgWidth = 1200
+      var svgHeight = 600
+      var padding = 20
 
-    var data_freq = 4; // Datapoints per second
-    var phase_data = []; // elements are {theta, thetadot}
+      var data_freq = 4; // Datapoints per second
+      var phase_data = []; // elements are {theta, thetadot}
 
-    var t0 = Date.now();
-    var t = Date.now();
-    var gravity = 1;
-
-
-    var p = d3.select("body")
-        .append('svg')
-        .attr("class","pen")
-        .attr('width',svgWidth)
-        .attr('height',svgHeight)
+      var t0 = Date.now();
+      var t = Date.now();
+      var gravity = 1;
 
 
-    $(document).ready(function() {
-      svg = d3.select(".pen");
+      var p = d3.select("body")
+          .append('svg')
+          .attr("class","pen")
+          .attr('width',svgWidth)
+          .attr('height',svgHeight)
 
 
-      pendulum.draw(true);
+      $(document).ready(function() {
+        svg = d3.select(".pen");
 
-      // Update and display the pendulum
-      d3.timer(function() {
-        dt = Date.now() - t;
-        t += dt;
-        pendulum.update(dt/1000);
-        pendulum.draw();
+
+        pendulum.draw(true);
+
+        // Update and display the pendulum
+        d3.timer(function() {
+          dt = Date.now() - t;
+          t += dt;
+          pendulum.update(dt/1000);
+          pendulum.draw();
+        });
+
+
+        // Take data and display it
+        setTimeout(function() {
+
+        }, 1000/data_freq);
       });
 
+      $("body").click(function(evt) {
+      })
 
-      // Take data and display it
-      setTimeout(function() {
+      // slider
+      var width = 400;
+      var height = 300;
 
-      }, 1000/data_freq);
-    });
+      // radius
+      d3.select("#nRadius").on("input", function() {
+        update(this.value);
+      });
 
-    $("body").click(function(evt) {
-    })
+      function update(nRadius) {
 
+        pendulum.r = nRadius;
+        // adjust the text on the range slider
+        d3.select("#nRadius-value").text(nRadius);
+        d3.select("#nRadius").property("value", nRadius);
+      }
 
-
-
-    // slider
-
-    var width = 400;
-    var height = 300;
-
-    var holder = d3.select("body")
-          .append("svg")
-          .attr("width", width)
-          .attr("height", height);
-
-
-    // radius
-    d3.select("#nRadius").on("input", function() {
-      pendulum.getR();
-      pendulum.draw()
-    });
-
-    update(20);
-
-    function update(nRadius) {
-
-      // adjust the text on the range slider
-      d3.select("#nRadius-value").text(nRadius);
-      d3.select("#nRadius").property("value", nRadius);
-
-      // update the circle radius
-      holder.selectAll("circle")
-        .attr("r", nRadius);
-    }
-
-
-
-
-
-
-
-
-
-  </script>
-
+    </script>
   </body>
 </html>

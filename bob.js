@@ -10,7 +10,6 @@ pendulum.l = 150; // Length of pendulum, from pivot to center of bob
 pendulum.r = 20; // Radius of bob
 pendulum.th = 2; // Angle of pendulum, measured CW from the vertical downwards position
 pendulum.thdot =0; // Angular velocity of the pendulum
-pendulum.getR = function() { return this.r = 40}
 pendulum.getX = function() { return this.pivot.x + this.l * Math.sin(this.th); }
 pendulum.getY = function() { return this.pivot.y + this.l * Math.cos(this.th); }
 pendulum.update = function(dt) {
@@ -31,16 +30,15 @@ pendulum.draw = function(firstDraw) {
       .attr('stroke', 'black')
       .attr('stroke-width', 2);
     this.bob = p.append('circle').data([pendulum])
-      .attr('r', function(pendulum) { return pendulum.r; })
       .attr('opacity', 0.5)
       .attr('fill', 'green');
-
   }
   this.rod
     .attr('d', lineFunction([this.pivot, this]));
   this.bob
     .attr('cx', function(pendulum) { return pendulum.getX(); })
     .attr('cy', function(pendulum) { return pendulum.getY(); })
+    .attr('r', function(pendulum) { return pendulum.r; })
   // d3.selectAll('div').data([this.th])
   //   .text(function(d) { return "Theta: " + Math.round((d*180/Math.PI)*10)/10 + " deg"; });
 }
