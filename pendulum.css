@@ -1,0 +1,55 @@
+body {
+           font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+       }
+.container{
+  margin-bottom: 30px;
+}
+#des {
+  font-size: 20px;
+  padding: 20px
+}
+
+#title{
+  font-size: 70px;
+
+}
+
+#subtitle{
+  font-size: 40px;
+}
+
+#description {
+  height : 300
+}
+
+#penimg{
+  height: 300;
+
+}
+label{
+  display: inline-block;
+  text-align: left;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+#wave{
+  padding-top: 50px;
+
+}
+.line {
+   fill: none;
+   stroke: black;
+   stroke-width: 10px;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}

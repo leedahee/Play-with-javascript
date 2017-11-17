@@ -3,57 +3,91 @@
     <title>single pendulum</title>
     <script src="jquery.min.js" charset="utf-8"></script>
     <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="bob.js"></script>
-    <script src="wave.js"></script>
-    <link rel="stylesheet" type="text/css" href="wave.css">
-
+    <script src="velocity.js"></script>
+    <script src="location.js"></script>
+    <!-- <script src="energy.js"></script>  -->
+    <link rel="stylesheet" type="text/css" href="pendulum.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
   </head>
 
   <body>
-    <h1>Pendulum Motion</h1>
-    <p>
-      <label for="nRadius"
-              style="display: inline-block; width: 240px; text-align: right">
-              Radius = <span id="nRadius-value"></span>
-       </label>
-       <input type="range" min="1" max="50" id="nRadius">
-    </p>
-    <p>
-      <label for="length"
-              style="display: inline-block; width: 240px; text-align: right">
-              Length = <span id="length-value">…</span>
-       </label>
-       <input type="range" min="1" max="300" id="length">
-    </p>
-    <svg width="960" height="500"></svg>
+    <div class="container text-center" id = "title">
+      <h><b>Pendulum Motion</b></h>
+    </div>
+
+
+    <div class="container">
+        <div class ="col-sm-4"><img src="pendulum.png" alt="pendulum imaage"400 height = 350></div>
+        <div class ="col-sm-8" id = 'des'> pendulum is a weight suspended from a <font color="red">pivot</font> so that it can swing freely. When a pendulum is displaced sideways from its resting, equilibrium position, it is subject to a restoring force due to gravity that will accelerate it back toward the equilibrium position. When released, the restoring force acting on the pendulum's mass causes it to oscillate about the equilibrium position, swinging back and forth. The time for one complete cycle, a left swing and a right swing, is called the period. The <font color="red">period</font> depends on the <font color="red">length</font> of the pendulum and also to a slight <font color="red">degree on the amplitude</font>, the width of the pendulum's swing.</div>
+    </div>
+
+
+        <p class ='container text-center'id = "subtitle">
+          <h>The Sinusoidal Nature of Pendulum Motion</h>
+        </p>
+    <div class ='container' >
+          <div class ="col-sm-3">
+              <!-- radius -->
+              <label for="nRadius">
+                      Mass = <span id="nRadius-value"></span>
+              </label>
+              <input type="range" min="5" max="50" id="nRadius">
+              <!-- rod -->
+              <label for="nLength">
+                       Length = <span id="nLength-value"></span>
+              </label>
+              <input type="range" min="50" max="300" id="nLength">
+              <!-- angle -->
+              <label for="nTheta">
+                        Theta = &emsp; &ensp;<span id="nTheta-value"></span>&deg;
+              </label>
+              <input type="range" min="0" max="90" id="nTheta">
+         </div>
+
+         <div class="col-sm-9" id="penimg">
+              <p id = 'pendulum'></p>
+         </div>
+    </div>
+
+
+    <!-- <p class ='container text-center'id = "subtitle">
+      <h>Period of Pendulum</h>
+    </p> -->
+     <div class ='container' id ='wave'>
+       <div class="container" >
+         <svg id ='velocity'></svg>
+       </div>
+       <div class="container">
+         <svg id ='location'></svg>
+       </div>
+     </div>
+
+
+
 
     <script type="text/javascript">
+
       var svg;
       var rod;
       var bob;
-
-      var svgWidth = 1200
-      var svgHeight = 600
+      var opacity = 0.5
       var padding = 20
-
       var data_freq = 4; // Datapoints per second
       var phase_data = []; // elements are {theta, thetadot}
-
       var t0 = Date.now();
       var t = Date.now();
-      var gravity = 1;
-
-
-      var p = d3.select("body")
+      var gravity = 9.8;
+      var p = d3.select("#penimg")
           .append('svg')
           .attr("class","pen")
-          .attr('width',svgWidth)
-          .attr('height',svgHeight)
-
+          .attr('height',400)
+          .attr('width',900)
 
       $(document).ready(function() {
         svg = d3.select(".pen");
-
 
         pendulum.draw(true);
 
@@ -65,32 +99,71 @@
           pendulum.draw();
         });
 
-
         // Take data and display it
         setTimeout(function() {
 
         }, 1000/data_freq);
       });
 
-      $("body").click(function(evt) {
-      })
 
-      // slider
-      var width = 400;
-      var height = 300;
+      var radiusOpacityScale=d3.scale.linear()
+          .domain([5,50])
+          .range([0.4,1]);
+
+      var thetaScale=d3.scale.linear()
+          .domain([0,90])
+          .range([0,1.6]);
+
 
       // radius
       d3.select("#nRadius").on("input", function() {
-        update(this.value);
+        Rupdate(this.value);
+        Oupdate(radiusOpacityScale(this.value));
       });
 
-      function update(nRadius) {
+      function Oupdate(o){
+        opacity = o;
+      }
+
+
+      function Rupdate(nRadius) {
 
         pendulum.r = nRadius;
+
         // adjust the text on the range slider
         d3.select("#nRadius-value").text(nRadius);
         d3.select("#nRadius").property("value", nRadius);
       }
+
+      // length
+      d3.select("#nLength").on("input", function() {
+        Lupdate(this.value);
+      });
+      function Lupdate(nLength) {
+        pendulum.l = nLength;
+        // adjust the text on the range slider
+        d3.select("#nLength-value").text(nLength);
+        d3.select("#nLength").property("value", nLength);
+      }
+
+      //Angle
+      d3.select("#nTheta").on("input", function() {
+        Tupdate(this.value);
+      });
+      function Tupdate(nTheta) {
+        pendulum.th = thetaScale(nTheta);
+
+        // adjust the text on the range slider
+        d3.select("#nTheta-value").text(nTheta);
+        d3.select("#nTheta").property("value", nTheta);
+      }
+    var veloValue =[]
+
+//
+// Velocity Wave
+    // createGraph()
+    var startGraph = window.setInterval(createVelocity, 100)
+    var startGraph = window.setInterval(createLocation, 100)
 
     </script>
   </body>
