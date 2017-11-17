@@ -1,21 +1,18 @@
 // https://bl.ocks.org/ajfarkas/a007097730f23ca0ff32b3e0fde226f6
 // store a bunch of time values for the graph
-datas = []
 
+// global variable for storing [time, velocity] values.
+var time_velo_vals=[]
+
+// Use the global array of time and velocity values to make
+// a line graph of those values over time.
 function createVelocity() {
   // this is how time would be stored on the server
    var now = Date.now()
-  // add datum
-  for (v in veloValue){
-    times.push({
-      time: +now,
-      value: +veloValue[v]
-    })
-  }
 
   // remove old data
-  if (times.length > 120)
-    times.shift()
+  if (time_velo_vals.length > 120)
+    time_velo_vals.shift()
   // define plot boundaries
   var width = 900,
       height = 200
@@ -51,19 +48,12 @@ function createVelocity() {
 
   // set time span to show
   var timeCap = width  // 12s
-  var latest = times.length
-    ? times[times.length - 1].time
+  var latest = time_velo_vals.length
+    ? time_velo_vals[time_velo_vals.length - 1].time
     : 0
-  var data = times.filter(function(d) {
+  var data = time_velo_vals.filter(function(d) {
     return d.time >= latest - timeCap
   })
-    // console.log("data:",d.time)
-    // console.log("times:",times)
-  // for (var value in values){
-  //   var onevalue = values[value]
-  //   onevalue
-  // }
-
 
   x.domain([latest - timeCap, latest])
   y.domain([-1,1])
