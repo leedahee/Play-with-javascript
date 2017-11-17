@@ -1,18 +1,13 @@
 // https://bl.ocks.org/ajfarkas/a007097730f23ca0ff32b3e0fde226f6
 // store a bunch of time values for the graph
-times = []
+time_loc_vals = []
 
 function createLocation() {
   // this is how time would be stored on the server
   var now = Date.now()
-  // add datum
-  times.push({
-    milliseconds: parseInt(now.toString().slice(-3)),
-    time: now
-  })
   // remove old data
-  if (times.length > 120)
-    times.shift()
+  if (time_loc_vals.length > 120)
+    time_loc_vals.shift()
   // define plot boundaries
   var width = 900,
       height = 200
@@ -47,11 +42,11 @@ function createLocation() {
 
 
   // set time span to show
-  var timeCap = width * 40 // 12s
-  var latest = times.length
-    ? times[times.length - 1].time
+  var timeCap = width // 12s
+  var latest = time_loc_vals.length
+    ? time_loc_vals[time_loc_vals.length - 1].time
     : 0
-  var data = times.filter(function(d) {
+  var data = time_loc_vals.filter(function(d) {
     return d.time >= latest - timeCap
   })
 
@@ -59,8 +54,8 @@ function createLocation() {
   y.domain([-1,1])
 
   var line = d3.svg.line()
-    .x(function(d) { return x(parseInt(d.time)) })
-    .y(function(d) { return y(d.milliseconds) })
+    .x(function(d) { return x(d.time) })
+    .y(function(d) { return y(d.value) })
   // make the graph
   var svg = d3.select('#location')
               .style("width", 900)
@@ -99,7 +94,7 @@ function createLocation() {
 
   // remove old line
   graph.select('.line').remove()
-  //add data line
+  // add data line
   graph.append('path')
     .datum(data)
     .attr('class', 'line')

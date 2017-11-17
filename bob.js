@@ -19,13 +19,15 @@ pendulum.update = function(dt) {
 
   // Update velocity
   this.thdot += thddot * dt;
-  veloValue.push(this.thdot)
+
+  // Push the time with the angular velocity into the global array tracking them.
+  time_velo_vals.push({ time: +Date.now(), value: +this.thdot })
 
   //Update position
   this.th += this.thdot * dt;
 
-
-
+  // Push the time with the location into the global array tracking them.
+  time_loc_vals.push({ time: +Date.now(), value: +this.th })
 }
 
 pendulum.draw = function(firstDraw) {
